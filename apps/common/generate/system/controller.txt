@@ -1,0 +1,68 @@
+<?php namespace apps\{moduleLower}\controller;
+/**
+ * {funcName} Controller
+ *
+ * @author Zix <zix2002@gmail.com>
+ * @version 2.0 , {date}
+ */
+
+
+
+use apps\common\service\{func}Service;
+
+class {func} extends {module} {
+
+	/**
+	 * {func} constructor.
+	 */
+	public function __construct() {
+		parent::__construct();
+		$this->_initClassName( __CLASS__ );
+		$this->service = {func}Service::instance();
+	}
+
+	//页面入口
+	public function index() {
+		$this->_init( '{funcName}' );
+
+		//uri
+		$this->_addParam( 'uri', [
+			{uploadUri}
+			{editorUri}
+			{select2Uri}
+		] );
+
+		//查询参数
+		$this->_addParam( 'query', [
+			'keyword'  => input( 'get.keyword', '' ),
+			'status'   => input( 'get.status', '' ),
+			'page'     => input( 'get.page', 1 ),
+			'pageSize' => input( 'get.pageSize', 10 ),
+      'sort'     => input( 'get.sort', 'id' ),
+      'order'    => input( 'get.order', 'DESC' ),
+		] );
+
+    {uploadParam}
+
+		//其他参数
+		$this->_addParam( [
+			'defaultRow' => $this->service->getDefaultRow() ,
+			'status' => $this->service->status ,
+		] );
+
+		//需要引入的 css 和 js
+		{select2Css}
+		{select2Js}
+		{uploadJs}
+		{editorJs}
+
+		{gridJs}
+    {treeGridJs}
+
+		return $this->_displayWithLayout();
+	}
+
+	{gridRead}
+	{treeGridRead}
+
+}

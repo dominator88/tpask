@@ -1,0 +1,86 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">邮件设置</h3>
+	</div>
+	<div class="panel-body">
+		<p>以下设置email的基本信息</p>
+	</div>
+	<form class="form-horizontal" role="form" >
+		<div class="form-group">
+			<label class="col-sm-2 control-label">邮件功能开关</label>
+			<div class="col-sm-5"  >
+				<div class="bootstrap-switch bootstrap-switch-small">
+						<input type="checkbox" name="mail_switch" id="mail_switch" checked>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">SSL开关</label>
+			<div class="col-sm-5"  >
+				<div class="bootstrap-switch bootstrap-switch-small">
+					<input type="checkbox" name="mail_ssl" id="mail_ssl" checked>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_url">发送邮件服务器地址(SMTP)</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="smtp_url" placeholder="发送邮件服务器地址(SMTP)" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_port">端口</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="smtp_port" value="25" placeholder="端口号" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_port">邮件发送帐户</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="smtp_account"   placeholder="邮件发送帐户" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_port">密码</label>
+			<div class="col-sm-5">
+				<input type="password" class="form-control" id="smtp_password"  placeholder="密码" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_port">邮件回复地址</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="smtp_reply"   placeholder="邮件回复地址" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_code">编码</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="smtp_code"  placeholder="邮件回复地址" />
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="smtp_code">测试邮件地址</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" id="smtp_test"   placeholder="邮件测试地址" />
+			</div>
+		</div>
+	</form>
+
+</div>
+
+<div class="rows">
+	<div class="col-xs-12 col-md-12" >
+		<button class="btn red btn-lg" id="submitFormBtn" type="button"><i class="fa fa-check"></i> 保存
+		</button>
+	</div>
+</div>

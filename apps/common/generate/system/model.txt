@@ -1,0 +1,15 @@
+<?php namespace apps\common\model;
+/**
+ * {funcName} Model
+ *
+ * @author Zix <zix2002@gmail.com>
+ * @version 2.0 , {date}
+ */
+
+
+
+use think\Model;
+
+class {func} extends Model {
+
+}

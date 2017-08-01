@@ -1,0 +1,2 @@
+	//引入 GridTable trait
+	use \apps\common\traits\service\GridTable;

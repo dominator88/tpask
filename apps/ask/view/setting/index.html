@@ -1,0 +1,74 @@
+<!-- BEGIN CONTENT BODY -->
+<div class="page-content">
+
+	<!-- BEGIN PAGE BAR -->
+	<div class="page-bar">
+		<ul class="page-breadcrumb">
+			<li> <a href="<?= $param['uri']['base']?>">首页</a> <i class="fa fa-circle"></i> </li>
+			<li> <span><?= $param['pageTitle'] ?></span> </li>
+		</ul>
+	</div>
+	<!-- END PAGE BAR -->
+
+	<!-- BEGIN PAGE CONTENT INNER -->
+	<div class="row" id="gridPortlet" style="margin-top: 16px">
+		<div class="col-md-12 col-md-12">
+			<!-- BEGIN PORTLET-->
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption caption-md">
+						<i class="icon-settings font-dark"></i>
+						<span class="caption-subject font-dark bold uppercase"><?= $param['pageTitle'] ?></span>
+						<!-- <span class="caption-helper hide">weekly stats...</span>-->
+					</div>
+					<div class="actions">
+
+					</div>
+				</div>
+
+				<div class="portlet-body">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="nav nav-tabs" id="type_tabs">
+								<li class="active">
+									<a data-toggle="tab" href="#base" data-type="system" aria-expanded="false">站点设置</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#seo" data-type="seo" aria-expanded="false">seo设置</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#register" data-type="register" aria-expanded="false">注册设置</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#mail" data-type="mail" aria-expanded="false">邮箱设置</a>
+								</li>
+							</ul>
+							<div class="tab-content" style="margin-top: 32px">
+								<div id="base" class="tab-pane fade active in">
+
+									&lt;!&ndash; start base form &ndash;&gt;
+								</div>
+								<div id="seo" class="tab-pane fade">
+									&lt;!&ndash; start api form &ndash;&gt;
+
+								</div>
+								<div id="register" class="tab-pane fade">
+									&lt;!&ndash; start register form &ndash;&gt;
+
+								</div>
+								<div id="mail" class="tab-pane fade">
+									&lt;!&ndash; start mail form &ndash;&gt;
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- END PORTLET-->
+		</div>
+	</div>
+	<!-- END PAGE CONTENT INNER -->
+</div><!-- END CONTENT BODY -->

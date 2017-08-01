@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	<base href="<?= $param['uri']['base'] ?>">
+	<title><?= $param['pageTitle'] ?> - <?= config('moduleName') ?></title>
+
+	<!-- Set render engine for 360 browser -->
+	<meta name="renderer" content="webkit">
+	<!-- No Baidu Site App-->
+	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+	<!-- Site Logo -->
+	<link rel="icon" type="image/png" href="static/favicon.png">
+
+	<!-- Core CSS Start -->
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+	<link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="node_modules/simple-line-icons-webfont/dist/css/simple-line-icons.css" rel="stylesheet">
+	<link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+
+	<link href="static/themes/global/app.min.css" rel="stylesheet">
+	<link href="static/themes/global/custom.min.css" rel="stylesheet">
+	<!-- Core CSS End -->
+
+	<!-- Custom CSS Start -->
+	<link href="static/themes/global/login.css" rel="stylesheet">
+	<!-- Custom CSS End -->
+</head>
+<body class=" login">
+<!-- BEGIN LOGO -->
+<div class="logo">
+	<a href="index.html">
+		<img src="static/themes/global/img/logo.png" alt="" /> </a>
+</div>
+<!-- END LOGO -->
+<!-- BEGIN LOGIN -->
+<div class="content">
+	<!-- BEGIN LOGIN FORM -->
+	<form class="login-form" method="post">
+		<h3 class="form-title">登录到你的账户</h3>
+		<div class="form-group">
+			<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+			<label class="control-label visible-ie8 visible-ie9">用户名或手机号</label>
+			<div class="input-icon">
+				<i class="fa fa-user"></i>
+				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="用户名或手机号" name="userInfo" /> </div>
+		</div>
+		<div class="form-group">
+			<label class="control-label visible-ie8 visible-ie9">你的密码</label>
+			<div class="input-icon">
+				<i class="fa fa-lock"></i>
+				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="你的密码" name="password" /> </div>
+		</div>
+		<div class="form-actions">
+			<label class="rememberme mt-checkbox mt-checkbox-outline">
+				<input type="checkbox" name="remember" value="1" /> 记住用户名
+				<span></span>
+			</label>
+			<button type="submit" class="btn blue pull-right" id="loginBtn">
+				登录 <i class="icon-arrow-right"></i>
+			</button>
+		</div>
+
+		<div class="forget-password">
+			<h4>忘记密码了 ?</h4>
+			<p> 请点击
+				<a href="javascript:;" id="forget-password" style="color: #ccc;"> 这里 </a> 找回密码。</p>
+		</div>
+	</form> <!-- END LOGIN FORM -->
+
+	<!-- BEGIN FORGOT PASSWORD FORM -->
+	<form class="forget-form" action="#" method="post">
+		<h3>忘记密码了 ?</h3>
+		<p> 请填写您的 e-mail 地址, 重置密码 </p>
+		<div class="form-group">
+			<div class="input-icon">
+				<i class="fa fa-envelope"></i>
+				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" /> </div>
+		</div>
+		<div class="form-actions">
+			<button type="button" id="back-btn" class="btn red btn-outline">返回 </button>
+			<button type="submit" class="btn green pull-right"> 发送 </button>
+		</div>
+	</form>
+	<!-- END FORGOT PASSWORD FORM -->
+
+</div>
+<!-- END LOGIN -->
+<!-- BEGIN COPYRIGHT -->
+<div class="copyright"> <?= config('custom.copyRight') ?> </div>
+
+
+<!-- Core Javascript Start -->
+<script src="node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="node_modules/js-cookie/src/js.cookie.js" type="text/javascript"></script>
+<script src="node_modules/jquery.backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
+<!-- Core Javascript End  -->
+
+<!-- Layout Javascript End-->
+<script src="static/js/global/app.min.js" type="text/javascript"></script>
+<script src="static/js/global/custom.min.js" type="text/javascript"></script>
+<!-- Layout Javascript End  -->
+
+<!-- Custom Javascript Start -->
+<script src="static/js/global/auth.js" type="text/javascript"></script>
+<?= $js ?>
+<!-- Custom Javascript End  -->
+
+</body>
+</html>

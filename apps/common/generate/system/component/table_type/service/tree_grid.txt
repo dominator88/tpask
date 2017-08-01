@@ -1,0 +1,36 @@
+//根据条件查询
+public function getByCond( $param ) {
+  $default = [
+    'field'  => [ ],
+    'pid'    => 0,
+    'status' => '',
+    'key'    => 'children'
+  ];
+  $param  = extend( $default , $param );
+
+  if ( $param['status'] !== '' ) {
+    $this->model->where('status' , $param['status']);
+  }
+
+  $data = $this->model
+    ->field( $param['field'] )
+    ->order( 'level ASC , sort ASC ' )
+    ->select();
+
+  //echo $this->model->_sql();
+
+  $result = [ ];
+  $index  = [ ];
+
+  foreach ( $data as $row ) {
+    if ( $row['pid'] == $param['pid'] ) {
+      $result[ $row['id'] ] = $row;
+      $index[ $row['id'] ]  = &$result[ $row['id'] ];
+    } else {
+      $index[ $row['pid'] ][ $param['key'] ][ $row['id'] ] = $row;
+      $index[ $row['id'] ] = &$index[ $row['pid'] ][ $param['key'] ][ $row['id'] ];
+    }
+  }
+
+  return $this->treeToArray( $result, $param['key'] );
+}

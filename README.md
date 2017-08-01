@@ -15,7 +15,7 @@
 | ----------- |:---------------------------------:| -------------------:|
 | 首页         | <https://www.wycmhb.com>          |                     |
 | 系统管理平台  | <https://www.wycmhb.com/backend>  | sys_admin 123456    |
-| 商户管理平台  | <https://www.wycmhb.com/mp>       | wy_admin 123123    |
+| 商户管理平台  | <https://www.wycmhb.com/mp>        | wy_admin 123123    |
 
 
 

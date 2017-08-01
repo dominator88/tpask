@@ -1,0 +1,53 @@
+<!-- detail page header start -->
+<div class="page-header">
+	<h1><?= $data['title'] ?></h1>
+	<!--<p>作者信息</p>-->
+	<small>阅读 <?= $data['pv'] ?></small>
+	<small><a href="<?= $param['uri']['this'] ?>#comments">评论 <?= $data['comments'] ?></a></small>
+	<small>喜欢 <?= $data['likes'] ?></small>
+</div>
+<!-- detail page header end -->
+
+<!-- detail content start -->
+<div class="article-content">
+	<?= $data['content'] ?>
+</div>
+<!-- detail content end -->
+
+<!-- like button start -->
+<hr>
+<div class="like-section">
+	<button type="button" class="btn btn-default" id="likeBtn">
+		<i class="fa fa-heart"></i> 喜欢 | <span id="likesCount"><?= $data['likes'] ?></span>
+	</button>
+</div>
+<!-- like button end -->
+
+<!-- comments start -->
+<hr>
+<div class="comments-section">
+	<a id="comments"></a>
+	<div class="">
+		<?= $data['comments']?> 条评论
+	</div>
+
+	<hr>
+
+	<ul class="comments-list"> </ul>
+
+	<div class="send-comment-section">
+		<form id="sendCommentForm">
+			<div class="send-comment-length">
+				可写 250 个字
+			</div>
+			<div class="send-comment-btn">
+				<button type="button" class="btn btn-primary" id="sendCommentBtn" >
+					<i class="icon-note"></i> 发表评论
+				</button>
+			</div>
+			<textarea class="form-control send-comment-content"></textarea>
+		</form>
+
+	</div>
+</div>
+<!-- comments end -->

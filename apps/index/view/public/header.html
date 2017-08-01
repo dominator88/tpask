@@ -1,0 +1,28 @@
+<div class="collapse navbar-collapse" id="navbar-collapse-mini">
+	<ul class="nav navbar-nav navbar-right">
+		<li class="dropdown">
+			<?php if ( empty($user) || empty( $user['icon'] ) ) : ?>
+			<a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" href="#">
+				<?php if ( empty($user) ) : ?>
+				<i class="fa fa-user"></i>
+				<?php else : ?>
+				<?= $user['nickname'] ; ?>
+				<?php endif ; ?>
+			</a>
+			<?php else : ?>
+			<a class="dropdown-toggle header-user-icon" data-toggle="dropdown" data-hover="dropdown" href="#">
+				<img src="<?= $param['uri']['img'] . $user['icon'] ?>">
+			</a>
+			<?php endif ; ?>
+			<ul class="dropdown-menu" role="menu">
+				<?php if ( empty($user) ) : ?>
+				<li><a href="auth/signup">注册</a></li>
+				<li><a href="auth/signin">登录</a></li>
+				<?php else : ?>
+				<li><a href="/user/<?= $user['id'] ?>">用户中心</a></li>
+				<li><a href="auth/signout">退出</a></li>
+				<?php endif ; ?>
+			</ul>
+		</li>
+	</ul>
+</div>
