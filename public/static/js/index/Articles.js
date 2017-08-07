@@ -18,6 +18,7 @@ var Articles = {
     this.initLikes();
     this.initComments();
     this.initSendComment();
+    this.initMenu();
   } ,
 
   //初始化图片
@@ -143,5 +144,8 @@ var Articles = {
     var strLen = self.config.maxCommentLength - self.config.curCommentLength;
     var $sendCommentLength = $( '.send-comment-length' );
     $sendCommentLength.html( this.config.tipTemplate.replace( /\{len}/g , strLen ) );
+  },
+  initMenu : function(){
+    $('.navbar-collapse li:eq(0)').addClass('active');
   }
 };

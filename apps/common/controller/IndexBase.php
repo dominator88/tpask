@@ -12,6 +12,7 @@ use apps\common\service\MerAlbumCatalogService;
 use apps\common\service\MerAlbumService;
 use apps\common\service\SysAreaService;
 use apps\common\service\UploadService;
+use apps\common\service\AskCategoryService;
 use think\View;
 
 class IndexBase {
@@ -48,6 +49,7 @@ class IndexBase {
     
     //取用户验证信息
     $this->_authUser();
+      $this->_menu();
   }
   
   /**
@@ -235,16 +237,16 @@ class IndexBase {
         $layoutData[ $key ] = $pageView->fetch( $value );
       }
     }
-    
-    
+
+
     //生成layout数据
-//    $layoutData = [
-//      'header'  => $pageView->fetch( 'public/header' ) ,
-//      'css'     => $this->_makeCss() ,
-//      'content' => $pageView->fetch( $view ) ,
-//      'js'      => $this->_makeJs() ,
-//      'footer'  => $pageView->fetch( 'public/footer' )
-//    ];
+   /* $layoutData = [
+      'header'  => $pageView->fetch( 'public/header' ) ,
+      'css'     => $this->_makeCss() ,
+      'content' => $pageView->fetch( $view['content'] ) ,
+      'js'      => $this->_makeJs() ,
+      'footer'  => $pageView->fetch( 'public/footer' )
+    ];*/
     
     $pageView->assign( $layoutData );
     
@@ -346,6 +348,15 @@ class IndexBase {
     
     return json( ajax_arr( '查询成功' , 0 , $data ) );
   }
+
+    protected  function  _menu(){
+        $AskCategoryService = AskCategoryService::instance();
+        $menu_list = $AskCategoryService->getByCond([
+            'status' => 1
+        ]);
+
+        $this->_addData('menu_list',$menu_list);
+    }
   
   
 }

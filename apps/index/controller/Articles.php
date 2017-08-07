@@ -2,17 +2,22 @@
 namespace apps\index\controller;
 
 use apps\common\controller\IndexBase;
+
+use apps\common\service\AskArticlesService;
+use apps\common\service\AskEmailService;
 use apps\common\service\MerArticlesService;
-use apps\common\service\MerUserCommentsService;
+use apps\common\service\AskUserCommentsService;
 use apps\common\service\MerUserFavoritesService;
 use apps\common\service\MerUserLikesService;
 use cebe\markdown\Markdown;
+
+use think\Db;
 
 class Articles extends IndexBase {
   
   public function __construct() {
     parent::__construct();
-    
+
     $this->_initClassName( __CLASS__ );
   }
   
@@ -22,7 +27,9 @@ class Articles extends IndexBase {
    * @return \think\response\Json
    */
   public function index() {
-    $MerArticles = MerArticlesService::instance();
+    $this->_init('文章列表页');
+
+    $AskArticles = AskArticlesService::instance();
     
     $param = [
       'catalogId'      => input( 'get.catalog' , '' ) ,
@@ -30,13 +37,21 @@ class Articles extends IndexBase {
       'keyword'        => input( 'get.keyword' , '' ) ,
       'page'           => input( 'get.page' , 1 ) ,
       'withoutContent' => TRUE ,
+        'pageSize'      => 2 ,
+        'count'     => TRUE
     ];
-    
-    $response['rows']  = $MerArticles->getByCond( $param );
-    $param['count']    = TRUE;
-    $response['total'] = $MerArticles->getByCond( $param );
-    
-    return json( ajax_arr( '查询成功' , 0 , $response ) );
+      $this->_addParam('uri',[
+          'base' => '',
+      ]);
+
+
+      $count = $AskArticles->getByCond( $param );
+      unset($param['count']);
+      $list  = $AskArticles->getPaginatorByCond( $param ,$count);
+        $this->_addData('list',$list);
+
+      return $this->_displayWithLayout( 'index' );
+   // return json( ajax_arr( '查询成功' , 0 , $response ) );
   }
   
   /**
@@ -47,7 +62,7 @@ class Articles extends IndexBase {
    * @return \think\response\View
    */
   public function detail( $id ) {
-    
+
     $MerArticles = MerArticlesService::instance();
     
     //取文章详情
@@ -70,7 +85,7 @@ class Articles extends IndexBase {
     $data['from']    = input( 'get.from' , 'web' );
     $data['content'] = $this->_parseMarkdown( $data['content'] );
     $this->_addData( 'data' , $data );
-    
+
     if ( $data['from'] == 'api' ) {
       return view( 'api' , $this->data );
     }
@@ -104,12 +119,12 @@ class Articles extends IndexBase {
   public function comments( $id ) {
     $method = strtolower( request()->method() );
     
-    $MerUserComments = MerUserCommentsService::instance();
+    $AskUserComments = AskUserCommentsService::instance();
     
     switch ( $method ) {
       case 'get' :
         //取文章评论
-        $data = $MerUserComments->getByCond( [
+        $data = $AskUserComments->getByCond( [
           'type'     => 'article' ,
           'typeId'   => $id ,
           'page'     => input( 'get.page' , 1 ) ,
@@ -123,7 +138,7 @@ class Articles extends IndexBase {
       case 'post' :
         //发表文章评论
         $content = input( 'post.content' , '' , 'trim' );
-        $result  = $MerUserComments->post( 'article' , $id , $this->userId , $content );
+        $result  = $AskUserComments->post( 'article' , $id , $this->userId , $content );
         
         return $result;
       default :
@@ -174,4 +189,6 @@ class Articles extends IndexBase {
         return ajax_arr( '未知请求' , 500 );
     }
   }
+
+
 }

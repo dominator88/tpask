@@ -207,7 +207,7 @@ class AuthService {
       return ajax_arr( '请填写密码' , 500 );
     }
     
-    $MerUser  = db( 'MerUser' );
+    $MerUser  = db( 'AskUser' );
     $userData = $MerUser->where( 'phone|email|username' , $userInfo )->find();
     
     if ( empty( $userData ) ) {

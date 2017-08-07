@@ -1,4 +1,9 @@
 <div class="collapse navbar-collapse" id="navbar-collapse-mini">
+	<ul class="nav navbar-nav navbar-left">
+{volist name='menu_list' id='menu'}
+		<li class=""><a href="#">{$menu.text}</a></li>
+		{/volist}
+		</ul>
 	<ul class="nav navbar-nav navbar-right">
 		<li class="dropdown">
 			<?php if ( empty($user) || empty( $user['icon'] ) ) : ?>
@@ -26,3 +31,4 @@
 		</li>
 	</ul>
 </div>
+
