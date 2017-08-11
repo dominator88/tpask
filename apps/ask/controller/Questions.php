@@ -31,7 +31,7 @@ class Questions extends Ask {
     
     //uri
     $this->_addParam( 'uri' , [
-      'preview'      => "{$this->baseUri}article/" ,
+      'preview'      => "{$this->baseUri}question/" ,
       'readComment'  => full_uri( 'ask/questions/read_comment' ) ,
       'setComment'   => full_uri( 'ask/questions/set_comment' ) ,
       'albumCatalog' => full_uri( 'ask/questions/read_album_catalog' ) ,

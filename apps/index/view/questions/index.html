@@ -1,0 +1,17 @@
+<div class="container" >
+	<div class="row">
+		<div class="col-xs-10">
+			<ul class="list-group">
+{volist name='list' id='article'}
+<li class="list-group-item">{$article.catalog_text}</li>
+{/volist}
+			</ul>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-10">
+{$list->render()}
+				</div>
+			</div>
+	</div>
+</div>

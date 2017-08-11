@@ -179,7 +179,7 @@ class AskUserCommentsService extends BaseService {
       ->where( 'type_id' , $typeId )
       ->where( 'user_id' , $userId )
       ->select();
-    
+
     if ( ! empty( $oldData ) ) {
       return ajax_arr( '已经评论过了' , 500 );
     }

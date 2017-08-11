@@ -224,6 +224,14 @@ class AskQuestionsService extends BaseService {
         $this->model->where( 'id' , $id )->setDec( 'likes' );
     }
 
+    public function incAnswers($id){
+        $this->model->where( 'id' , $id )->setInc( 'answers' );
+    }
+
+    public function decAnswers($id){
+        $this->model->where( 'id' , $id )->setDec( 'answers' );
+    }
+
     /**
      * @param $id
      */
@@ -233,5 +241,18 @@ class AskQuestionsService extends BaseService {
 
     public function decPv( $id ) {
         $this->model->where( 'id' , $id )->setDec( 'pv' );
+    }
+
+
+    public function getDetailById($id){
+        $param = [
+            'field' => ['q.*' ,'u.nickname'],
+        ];
+        $this->model->alias('q');
+        $this->model->where('q.id' , $id);
+        $this->model->field($param['field'])->join('ask_user u' , 'q.userId=u.id' , 'left');
+        $data = $this->model->find();
+
+        return $data;
     }
 }

@@ -60,8 +60,9 @@ class AskAnswersService extends BaseService {
  */
 public function getByCond( $param ) {
   $default = [
-    'field'    => [ ],
+    'field'    => [ 'a.*' , 'u.nickname' , 'u.phone' , 'u.icon' ],
     'keyword'  => '',
+      'qid' => '',
     'status'   => '',
     'page'     => 1,
     'pageSize' => 10,
@@ -72,20 +73,24 @@ public function getByCond( $param ) {
   ];
 
   $param = extend( $default, $param );
-
+    $this->model->alias('a');
   if ( ! empty( $param['keyword'] ) ) {
-    $this->model->where('name' , 'like' , "%{$param['keyword']}%" );
+    $this->model->where('a.name' , 'like' , "%{$param['keyword']}%" );
   }
 
   if ( $param['status'] !== '' ) {
-    $this->model->where( 'status' , $param['status'] );
+    $this->model->where( 'a.status' , $param['status'] );
   }
+    if ( $param['qid'] !== '' ) {
+        $this->model->where( 'a.qid' , $param['qid'] );
+    }
 
   if ( $param['count'] ) {
     return $this->model->count();
   }
 
-  $this->model->field( $param['field'] );
+  $this->model->field( $param['field'] )
+      ->join( 'ask_user u' , 'a.userId=u.id' , 'left');
 
   if ( ! $param['getAll'] ) {
     $this->model->limit( ( $param['page'] - 1 ) * $param['pageSize'], $param['pageSize'] );
@@ -99,6 +104,61 @@ public function getByCond( $param ) {
 
   return $data ? $data : [ ];
 }
+
+    /**
+     * 发表回答
+     *
+     * @param $qid 问题id
+     * @param $userId
+     * @param $content
+     *
+     * @return array
+     */
+    public function post( $qid , $userId , $content ) {
+
+        if ( empty( $qid ) ) {
+            return ajax_arr( '请填写问题ID' , 500 );
+        }
+
+        if ( empty( $userId ) ) {
+            return ajax_arr( '请先登录' , 500 );
+        }
+
+        if ( empty( $content ) ) {
+            return ajax_arr( '请填写回答内容' , 500 );
+        }
+
+        $oldData = $this->model
+            ->where( 'qid' , $qid )
+            ->where( 'userId' , $userId )
+            ->select();
+
+        if ( ! empty( $oldData ) ) {
+            return ajax_arr( '已经回答过了' , 500 );
+        }
+
+
+        $data = [
+            'userId' => $userId ,
+            'qid' => $qid ,
+            'content' => $content
+        ];
+
+        $result = $this->insert( $data );
+
+        if ( $result['code'] == 0 ) {
+
+                //添加 article
+                $AskQuestionsService = AskQuestionsService::instance();
+                 $AskQuestionsService->incAnswers( $qid );
+
+            }
+
+
+        return $result;
+    }
+
+
 
     /**
      * 增加 评论数

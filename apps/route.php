@@ -22,8 +22,18 @@ Route::rule( 'article/comments/:id' , 'index/articles/comments' );
 Route::rule( 'article/likes/:id' , 'index/articles/likes' );
 Route::rule( 'article/favorites/:id' , 'index/articles/favorites' );
 
+//问题回答 评论
+Route::rule( 'question/likes/:id' , 'index/questions/likes' );
+Route::rule( 'question/favorites/:id' , 'index/questions/favorites' );
+Route::rule( 'question/answers/:id' , 'index/questions/answers' );
+Route::rule( 'question/comments/:type/:id' , 'index/questions/comments' );
+Route::rule( 'question/comments/:id' , 'index/questions/comments' );
+
 //文章详情
 Route::rule( 'article/:id' , 'index/articles/detail' );
+
+//问题详情
+Route::rule( 'question/:id' , 'index/questions/detail' );
 
 //商品详情
 Route::rule( 'goods_api/:id' , 'index/goods/detail_for_api' );

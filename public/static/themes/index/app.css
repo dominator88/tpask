@@ -209,6 +209,27 @@ pre {
 	font-size: 13px;
 }
 
+.send-answer-section {
+	position: relative;
+}
+
+ .send-answer-content {
+	min-height: 120px;
+	resize: none;
+	padding-bottom: 30px;
+}
+
+ .send-answer-btn {
+	bottom: 6px;
+	right: 6px;
+}
+
+ .send-answer-length {
+	position: absolute;
+	bottom: 6px;
+	left: 6px;
+}
+
 .send-comment-section {
 	position: relative;
 }
