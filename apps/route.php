@@ -28,13 +28,16 @@ Route::rule( 'question/favorites/:id' , 'index/questions/favorites' );
 Route::rule( 'question/answers/:id' , 'index/questions/answers' );
 Route::rule( 'question/comments/:type/:id' , 'index/questions/comments' );
 Route::rule( 'question/comments/:id' , 'index/questions/comments' );
-
+Route::rule( 'question/adopt/:id' , 'index/questions/adopt' );
 //文章详情
 Route::rule( 'article/:id' , 'index/articles/detail' );
 
 //问题详情
-Route::rule( 'question/:id' , 'index/questions/detail' );
+Route::rule([ 'question/:id$' => ['index/questions/detail' ,[] , ['id'=> '\d+']]]);
+Route::rule( 'question/create' , 'index/questions/create' );
+Route::rule( 'question/index/[:page]' , 'index/questions/index' );
 
+//Route::rule( 'question/:catid/[:page]' , 'index/questions/index' );
 //商品详情
 Route::rule( 'goods_api/:id' , 'index/goods/detail_for_api' );
 

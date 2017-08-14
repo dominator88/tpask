@@ -1,4 +1,6 @@
 <?php namespace apps\common\service;
+use think\Request;
+
 /**
  * AskQuestions Service
  *
@@ -128,6 +130,74 @@ class AskQuestionsService extends BaseService {
         return $data;
     }
 
+    public function getPaginatorByCond($param , $count){
+        $default = [
+            'field'          => [ 'a.*' , 'ac.text catalog_text' , 'ac.icon catalog_icon' ] ,
+            'keyword'        => '' ,
+            'tag'            => '' ,
+            'status'         => '' ,
+            'catalogId'      => '' ,
+            'page'           => 1 ,
+            'pageSize'       => 10 ,
+            'sort'           => 'id' ,
+            'order'          => 'DESC' ,
+            'count'          => FALSE ,
+            'getAll'         => FALSE ,
+            'withoutContent' => FALSE ,
+        ];
+        $param = extend( $default , $param );
+
+        $this->model->alias( 'a' );
+
+        if ( ! empty( $param['keyword'] ) ) {
+            $this->model->where( 'a.title' , 'like' , "%{$param['keyword']}%" );
+        }
+
+        if ( ! empty( $param['tag'] ) ) {
+            $this->model->where( 'a.tags' , 'like' , "%{$param['tag']}%" );
+        }
+
+
+        if ( $param['catalogId'] !== '' ) {
+            $Askcategory = AskcategoryService::instance();
+            $catalog            = $Askcategory->getFamilyId( [ 'pid' => intval( $param['catalogId'] ) ] );
+
+            $this->model->where( 'a.catalog_id' , 'in' , $catalog );
+        }
+
+        if ( $param['status'] !== '' ) {
+            $this->model->where( 'a.status' , $param['status'] );
+        }
+
+
+        $this->model->join( 'ask_category ac' , 'ac.id = a.catalog_id' );
+
+        if ( $param['count'] ) {
+            return $this->model->count();
+        }
+
+        $this->model->field( $param['field'] );
+
+
+        $data = $this->model->paginate($param['pageSize'] ,$count,['var_page' => 'page','path' => 'question/index/[PAGE]' , 'page' => $param['page']]);
+
+        $order[] = "a.{$param['sort']} {$param['order']}";
+        $this->model->order( $order );
+
+
+
+        if ( $param['withoutContent'] ) {
+            foreach ( $data as &$item ) {
+                unset( $item['content'] );
+            }
+        }
+
+//		echo $this->model->getLastSql();
+
+        return $data;
+
+    }
+
     /**
      * 取数据 和 包含用户收藏信息
      *
@@ -254,5 +324,13 @@ class AskQuestionsService extends BaseService {
         $data = $this->model->find();
 
         return $data;
+    }
+
+    public function  adopt($id , $rec_id ){
+        $flag = $this->model->where('id' ,$id)->update(['adopt' => $rec_id]);
+        if(! $flag){
+            return ajax_arr('采纳失败' , 500);
+        }
+        return ajax_arr('采纳成功' , 0);
     }
 }

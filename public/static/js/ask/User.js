@@ -27,6 +27,8 @@ var User = {
     //初始化数据表
     this.initGrid();
     this.initAddressGrid();
+    this.initQuestionGrid();
+    this.initAnswerGrid();
     $( 'input[name="area_id"]' ).AreaSelection( {
       uri : Param.uri.area
     } );
@@ -367,6 +369,12 @@ var User = {
         }
       }
     } );
+  },
+  initQuestionGrid : function(){
+
+  },
+  initAnswerGrid : function () {
+
   }
 
 };

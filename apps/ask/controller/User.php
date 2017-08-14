@@ -32,6 +32,8 @@ class User extends Ask {
       'resetPwd'       => full_uri( 'ask/user/reset_pwd' , [ 'id' => '' ] ) ,
       //address
       'readAddress'    => full_uri( 'ask/meruseraddress/read' , [ 'userId' => '' ] ) ,
+      'readQuestions'    => full_uri( 'ask/questions/read' , [ 'userId' => '' ] ) ,
+      'readAnswers'    => full_uri( 'ask/answers/read' , [ 'userId' => '' ] ) ,
       'insertAddress'  => full_uri( 'ask/meruseraddress/insert' ) ,
       'updateAddress'  => full_uri( 'ask/meruseraddress/update' , [ 'id' => '' ] ) ,
       'destroyAddress' => full_uri( 'ask/meruseraddress/destroy' ) ,

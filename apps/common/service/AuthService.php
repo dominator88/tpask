@@ -293,7 +293,7 @@ class AuthService {
       }
       
       //检查是否已经邮箱注册过了
-      $MerUser = MerUserService::instance();
+      $AskUser = AskUserService::instance();
       
       //开始创建用户
       $addData = [
@@ -303,7 +303,7 @@ class AuthService {
         'reg_ip'   => request()->ip( 0 , TRUE ) ,
       ];
       
-      $regResult = $MerUser->insertByEmail( $addData );
+      $regResult = $AskUser->insertByEmail( $addData );
       
       if ( $regResult['code'] != 0 ) {
         throw new \Exception( $regResult['msg'] );

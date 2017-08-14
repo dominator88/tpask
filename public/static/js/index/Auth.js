@@ -102,37 +102,36 @@ var Auth = {
     //注册按钮
     $( '#signUpBtn' ).on( 'click' , function ( e ) {
       e.preventDefault();
-      $( this ).props( 'disabled' , true );
-
+      $( this ).prop( 'disabled' , true );
       var data = $( '#signUpForm' ).serializeObject();
       if ( empty( data.email ) ) {
         tips.error( '请填写email' );
-        $( this ).props( 'disabled' , false );
+        $( this ).prop( 'disabled' , false );
         return false;
       }
 
       if ( empty( data.pwd ) ) {
         tips.error( '请设置密码' );
-        $( this ).props( 'disabled' , false );
+        $( this ).prop( 'disabled' , false );
         return false;
       }
 
       if ( empty( data.captcha ) ) {
         tips.error( '请填写验证码' );
-        $( this ).props( 'disabled' , false );
+        $( this ).prop( 'disabled' , false );
         return false;
       }
 
       $.post( Param.uri.doSignUp , data )
        .fail( function ( res ) {
-         $( this ).props( 'disabled' , false );
+         $( this ).prop( 'disabled' , false );
          tips.error( res.responseText );
        } )
        .done( function ( res ) {
 
          if ( res.code != 0 ) {
            tips.error( res.msg );
-           $( this ).props( 'disabled' , false );
+           $( this ).prop( 'disabled' , false );
            return false;
          }
          tips.success( res.msg , function () {

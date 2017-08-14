@@ -27,7 +27,15 @@ class Questions extends IndexBase {
    * @return \think\response\Json
    */
   public function index() {
-    $this->_init('文章列表页');
+    $this->_init('问题列表页');
+
+      $this->data['initPageJs'] = false;
+      $this->data['jsLib'][]  = 'static/js/index/QuestionsCreate.js';
+      $this->data['jsCode']  = [
+          'QuestionsCreate.init();'
+      ];
+      $this->_addCssLib( 'node_modules/simplemde/dist/simplemde.min.css' );
+      $this->_addJsLib( 'node_modules/simplemde/dist/simplemde.min.js' );
 
     $AskQuestions = AskQuestionsService::instance();
     
@@ -35,14 +43,12 @@ class Questions extends IndexBase {
       'catalogId'      => input( 'get.catalog' , '' ) ,
       'tag'            => input( 'get.tag' , '' ) ,
       'keyword'        => input( 'get.keyword' , '' ) ,
-      'page'           => input( 'get.page' , 1 ) ,
+      'page'           => input( 'param.page' , 1 ) ,
       'withoutContent' => TRUE ,
-        'pageSize'      => 2 ,
+        'pageSize'      => 5 ,
         'count'     => TRUE
     ];
-      $this->_addParam('uri',[
-          'base' => '',
-      ]);
+
 
 
       $count = $AskQuestions->getByCond( $param );
@@ -52,6 +58,52 @@ class Questions extends IndexBase {
 
       return $this->_displayWithLayout( 'index' );
    // return json( ajax_arr( '查询成功' , 0 , $response ) );
+  }
+
+  public function create(){
+      $method = strtolower(request()->method());
+      switch($method){
+          case 'get' :
+              $this->_init('创建问题');
+              $this->_addParam('uri' , [ 'questioncreate' => full_uri( 'index/questions/create') ,'questioncategory' => full_uri( 'index/category/index')]);
+              $this->data['initPageJs'] = false;
+              $this->data['jsLib'][]  = 'static/js/index/QuestionsCreate.js';
+              $this->data['jsCode']  = [
+                  'QuestionsCreate.init();'
+              ];
+              $this->_addCssLib( 'node_modules/simplemde/dist/simplemde.min.css' );
+              $this->_addJsLib( 'node_modules/simplemde/dist/simplemde.min.js' );
+              //悬赏
+              $price_arr = [ 3 , 5 , 8 , 10 , 20 , 30 ,50];
+              $this->_addParam('prices' , $price_arr);
+              return $this->_displayWithLayout('create');
+             break;
+          case 'post' :
+              $title = input('post.title' , '' , 'trim');
+              $content = input('post.content' , '' , 'trim');
+              $catalog_id = input('post.category' ,'' , 'trim');
+                $price = input('post.price' ,0 , 'intval');
+              $hide = input('post.hide' ,0);
+              $data = [
+                  'title' => $title,
+                  'content' => $content ,
+                  'userId'  => $this->userId ,
+                  'catalog_id' => $catalog_id ,
+                  'price' => $price ,
+                  'hide'  => $hide ,
+                  'status' => 1 ,
+                  'created_at' => date('Y-m-d H:i:s' , time()) ,
+                  'updated_at' => date('Y-m-d H:i:s' , time()) ,
+
+              ];
+              $AskQuestions = AskQuestionsService::instance();
+              $result = $AskQuestions->insert($data);
+              break;
+
+
+      }
+
+      return $result;
   }
   
   /**
@@ -81,6 +133,7 @@ class Questions extends IndexBase {
       'this'      => "/question/$id" ,
         'answers'   => "/question/answers/$id",
         'answercomments'   => "question/comments/answers/$id",
+        'adopt'     => "question/adopt/$id",
       'comments'  => "/question/comments/$id" ,
 
       'likes'     => "/question/likes/$id" ,
@@ -212,7 +265,8 @@ class Questions extends IndexBase {
    *
    * @return array
    */
-  public function comments( $id ) {
+  public function comments($type , $rec_id ) {
+
     $method = strtolower( request()->method() );
 
     $AskUserCommentsService = AskUserCommentsService::instance();
@@ -221,21 +275,22 @@ class Questions extends IndexBase {
       case 'get' :
         //取文章评论
         $data = $AskUserCommentsService->getByCond( [
-          'typeId'   => $id ,
+          'typeId'   => $rec_id ,
+            'type' => $type ,
           'page'     => input( 'get.page' , 1 ) ,
           'pageSize' => input( 'get.pageSize' , 6 ) ,
           'statusGT' => - 1 ,
           'sort'     => 'id' ,
           'order'    => 'desc'
         ] );
-        
+       //  echo $AskUserCommentsService->model->getLastSql();
         return ajax_arr( '查询成功' , 0 , [ 'rows' => $data ] );
       case 'post' :
         //发表文章评论
         $content = input( 'post.content' , '' , 'trim' );
         $type  =  input ('param.type' ,'' , 'trim');
 
-        $result  = $AskUserCommentsService->post( $type , $id , $this->userId , $content );
+        $result  = $AskUserCommentsService->post( $type , $rec_id , $this->userId , $content );
         
         return $result;
       default :
@@ -285,6 +340,26 @@ class Questions extends IndexBase {
       default :
         return ajax_arr( '未知请求' , 500 );
     }
+  }
+
+  /**
+   * 采纳为正确答案
+     *
+     * @param $id
+    *
+    * * @return array
+   */
+  public function adopt( $id , $rec_id){
+      $method = strtolower( request()->method() );
+        $AskQuestions = AskQuestionsService::instance();
+      switch($method){
+          case 'post' :
+            $result = $AskQuestions->adopt($id , $rec_id);
+            return $result;
+              break;
+          default :
+              return ajax_arr( '未知请求' , 500 );
+      }
   }
 
 

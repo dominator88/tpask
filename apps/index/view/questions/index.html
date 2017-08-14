@@ -1,9 +1,9 @@
-<div class="container" >
+<div class="container  inner-page-content" >
 	<div class="row">
 		<div class="col-xs-10">
 			<ul class="list-group">
-{volist name='list' id='article'}
-<li class="list-group-item">{$article.catalog_text}</li>
+{volist name='list' id='val'}
+<li class="list-group-item"><a href="{:url('index/questions/detail',"id=$val[id]" , '' )}" >[{$val.catalog_text}]{$val.title}</a></li>
 {/volist}
 			</ul>
 		</div>

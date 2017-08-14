@@ -192,7 +192,13 @@ class IndexBase {
     
     return join( "\n" , $html );
   }
-  
+
+  /**
+   * 动态加载JS留空
+   */
+  public function _makeJsBlank(){
+      return '';
+  }
   /**
    * 生成自定义 css 代码
    * @return string
@@ -249,7 +255,7 @@ class IndexBase {
     ];*/
     
     $pageView->assign( $layoutData );
-    
+
     return $pageView->fetch( $layout );
   }
   

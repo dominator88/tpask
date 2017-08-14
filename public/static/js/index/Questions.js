@@ -22,13 +22,14 @@ var Questions = {
     '<p class="text-right">' +
     '{replyBtn}' +
     '{reply}</li>' ,
-    answerReplyBtnTemp :'<button class="btn btn-link replyBtn" data-id="{articleId}">回复</button></p>' ,
+    answerReplyBtnTemp :'<button class="btn btn-link adoptBtn" data-id="{articleId}">采纳为最佳答案</button><button class="btn btn-link replyBtn" data-id="{articleId}">回复</button></p>' ,
     answerItemReplyTemp : '<div class="reply"><blockquote>{replyContent}<footer>{timestamp}</footer></blockquote></div>' ,
   } ,
   init : function () {
     this.initImg();
     this.initLikes();
     this.initAnswers();
+    this.initBtn();
     this.initSendAnswer();
     this.initReplyComment();
     this.initSendCommentReply();
@@ -190,7 +191,9 @@ var Questions = {
 
     //发表评论按钮
     $( '#sendCommentBtn' ).on( 'click' , function ( e ) {
+
       var data = {
+
         content : self.config.curComment
       };
       $.post( Param.uri.comments , data )
@@ -215,7 +218,7 @@ var Questions = {
 
       var data = {
         content : $(this).closest('div').find('textarea').val(),
-        id : $(this).data('id'),
+        rec_id : $(this).data('id'),
       };
 
       $.post( Param.uri.answercomments , data).fail(function(res){
@@ -254,6 +257,7 @@ var Questions = {
           $(this).closest('div').find('.send-comment-reply').data('id' , id );
 
           $(this).next('.reply').slideToggle("fast");
+
         }
     });
 
@@ -261,9 +265,9 @@ var Questions = {
 
   initReplyCommentList : function(node , id){
     var self = this;
-    var data = {};
+    var data = {rec_id : id ,  module : 'answers'};
 
-    $.get( Param.uri.answercomments ).fail( function(res){
+    $.get( Param.uri.answercomments ,data ).fail( function(res){
       tips.error( res.msg );
     }).done(function( res ){
       if( res.code != 0 ){
@@ -295,7 +299,8 @@ var Questions = {
             .replace( /\{content}/g , row[ 'content' ] )
             .replace( /\{reply}/g , reply );
       }
-      $( node ).closest('div').find('.answers-list .reply').append( html );
+
+      $( node ).closest('li').find('.reply').append( html );
     });
 
   },
@@ -329,5 +334,27 @@ var Questions = {
   },
   initMenu : function(){
     $('.navbar-collapse li:eq(0)').addClass('active');
+  },
+  initBtn : function(){
+    var self = this;
+    $('body').on('click' ,'.adoptBtn' , function(e){
+        e.preventDefault();
+      var id = $(this).data('id');
+        var data = {
+          rec_id : id
+        };
+        $.post(Param.uri.adopt , data )
+            .done(function(res){
+              if(res.code == 0){
+                tips.success(res.msg);
+              }else{
+                tips.error(res.msg);
+              }
+
+        }).fail(function(res){
+              tips.error(res.msg);
+            });
+    });
+
   }
 };

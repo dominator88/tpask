@@ -86,7 +86,7 @@ class Auth extends IndexBase {
         
         $Auth = AuthService::instance();
         $ret  = $Auth->webSignUpByMail( $email , $pwd , $captcha , config( 'sessionName' ) );
-        
+
         return json( $ret );
       default :
         return json( ajax_arr( '未知请求方式' , 500 ) );

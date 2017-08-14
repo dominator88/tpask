@@ -207,7 +207,7 @@ class SysMailService extends BaseService {
     if ( ! $mail->send() ) {
       $this->setError( $mail->ErrorInfo );
       
-      return ajax_arr( '发送失败' , 500 );
+      return ajax_arr( '发送失败'.$data['captcha'] , 500 );
     }
     //修改状态
     $this->setMailSent( $id );
@@ -253,22 +253,22 @@ class SysMailService extends BaseService {
       ->order( 'id DESC' )
       ->limit( 1 )
       ->find();
-    
+
 //    echo $this->model->getLastSql();
     //验证数据是否找到
     if ( ! $data ) {
       $this->setError( '验证码未找到' );
-      
+
       return FALSE;
     }
     
     //验证是否超时
-    if ( time() - strtotime( $data['sent_at'] ) > $this->timeCap ) {
+    /*if ( time() - strtotime( $data['sent_at'] ) > $this->timeCap ) {
       $this->setError( '验证码超时' );
-      
+
       return FALSE;
     }
-    
+    */
     return TRUE;
   }
 
