@@ -18,7 +18,7 @@ class Answers extends Ask {
   /**
    * Answers constructor.
    */
-  public function __construct() {
+  public  function __construct() {
     parent::__construct();
     $this->_initClassName( __CLASS__ );
     $this->service = AskAnswersService::instance();
