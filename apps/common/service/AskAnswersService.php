@@ -68,6 +68,7 @@ public function getByCond( $param ) {
     'pageSize' => 10,
     'sort'     => 'id',
     'order'    => 'DESC',
+      'withQuestion' => false,
     'count'    => FALSE,
     'getAll'   => FALSE
   ];
@@ -94,6 +95,11 @@ public function getByCond( $param ) {
 
   if ( ! $param['getAll'] ) {
     $this->model->limit( ( $param['page'] - 1 ) * $param['pageSize'], $param['pageSize'] );
+  }
+
+  if($param['withQuestion']){
+      $field_q = ['q.title'];
+    $this->model->field(extend($param['field'] ,$field_q ))->join('ask_questions q','a.qid=q.id' ,'left');
   }
 
   $order[] = "{$param['sort']} {$param['order']}";
@@ -172,5 +178,9 @@ public function getByCond( $param ) {
     public function decComments( $id ) {
         $this->model->where( 'id' , $id )->setDec( 'comments' );
     }
-  
+
+
+    public function setAdopt($id){
+        $this->model->where('id' ,$id)->update([ 'adopt' => 1 ]);
+    }
 }

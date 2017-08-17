@@ -30,7 +30,7 @@ class Answers extends Ask {
     
     //uri
     $this->_addParam( 'uri' , [
-      'preview'      => "{$this->baseUri}article/" ,
+      'preview'      => "{$this->baseUri}question/" ,
       'readComment'  => full_uri( 'ask/answers/read_comment' ) ,
       'setComment'   => full_uri( 'ask/answers/set_comment' ) ,
       'albumCatalog' => full_uri( 'ask/answers/read_album_catalog' ) ,
@@ -115,8 +115,9 @@ class Answers extends Ask {
       'pageSize'  => input( 'get.pageSize' , 10 ) ,
       'sort'      => input( 'get.sort' , 'id' ) ,
       'order'     => input( 'get.order' , 'DESC' ) ,
+        'withQuestion' => TRUE,
     ];
-    
+
     $data['rows']    = $this->service->getByCond( $config );
     $config['count'] = TRUE;
     $data['total']   = $this->service->getByCond( $config );

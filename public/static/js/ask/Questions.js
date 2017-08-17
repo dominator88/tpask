@@ -305,3 +305,8 @@ var formatTags = function ( value ) {
   }
   return html;
 };
+
+var formatAnswers = function ( value ){
+  var answers = value;
+  return answers;
+}

@@ -28,6 +28,7 @@ class AskUserComments extends Ask {
     
     //uri
     $this->_addParam( 'uri' , [
+     //   'preview' => "{$this->baseUri}askusercomments/" ,
     
     
     ] );

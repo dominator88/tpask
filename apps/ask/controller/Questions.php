@@ -120,8 +120,9 @@ class Questions extends Ask {
       'pageSize'  => input( 'get.pageSize' , 10 ) ,
       'sort'      => input( 'get.sort' , 'id' ) ,
       'order'     => input( 'get.order' , 'DESC' ) ,
+
     ];
-    
+
     $data['rows']    = $this->service->getByCond( $config );
     $config['count'] = TRUE;
     $data['total']   = $this->service->getByCond( $config );

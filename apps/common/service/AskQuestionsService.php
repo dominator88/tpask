@@ -17,8 +17,9 @@ class AskQuestionsService extends BaseService {
 
     //状态
     public $status = [
-        0 => '禁用' ,
-        1 => '启用' ,
+        0 => '未审核' ,
+        1 => '待解决' ,
+        2 => '已解决' ,
     ];
 
     //类实例
@@ -327,7 +328,14 @@ class AskQuestionsService extends BaseService {
     }
 
     public function  adopt($id , $rec_id ){
+
+  
+
         $flag = $this->model->where('id' ,$id)->update(['adopt' => $rec_id]);
+        $AskAnswersService = AskAnswersService::instance();
+        if($flag){
+            $AskAnswersService->setAdopt($rec_id);
+        }
         if(! $flag){
             return ajax_arr('采纳失败' , 500);
         }

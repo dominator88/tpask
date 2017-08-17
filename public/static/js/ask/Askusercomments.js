@@ -293,8 +293,8 @@ window.onpopstate = function ( event ) {
 };
 
 var formatPreview = function ( value , row ) {
-  return '[' + row.catalog_text + '] ' +
-         '<a href="' + Param.uri.preview + row.id + '" target="_blank">' + value + '</a>';
+ // return '<a href="' + Param.uri.preview + row.id + '" target="_blank">' + value + '</a>';
+  return value;
 };
 
 var formatTags = function ( value ) {
