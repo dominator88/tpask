@@ -10,7 +10,7 @@ return [
 	//超级用户ID
 	'superAdminId'     => 1,
 	
-	//backend session 名称
+	//ask session 名称
 	'sessionName'      => 'ask_jrmall_session',
 	
 	//默认密码

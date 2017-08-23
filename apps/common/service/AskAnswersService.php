@@ -64,6 +64,7 @@ public function getByCond( $param ) {
     'keyword'  => '',
       'qid' => '',
     'status'   => '',
+      'adopt' => 0,
     'page'     => 1,
     'pageSize' => 10,
     'sort'     => 'id',
@@ -82,6 +83,9 @@ public function getByCond( $param ) {
   if ( $param['status'] !== '' ) {
     $this->model->where( 'a.status' , $param['status'] );
   }
+    if ( $param['adopt'] !== '' ) {
+        $this->model->where( 'a.adopt' , $param['adopt'] );
+    }
     if ( $param['qid'] !== '' ) {
         $this->model->where( 'a.qid' , $param['qid'] );
     }

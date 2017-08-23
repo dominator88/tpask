@@ -331,7 +331,7 @@ class AskQuestionsService extends BaseService {
 
   
 
-        $flag = $this->model->where('id' ,$id)->update(['adopt' => $rec_id]);
+        $flag = $this->model->where('id' ,$id)->update(['adopt' => $rec_id , 'status' => 2]);
         $AskAnswersService = AskAnswersService::instance();
         if($flag){
             $AskAnswersService->setAdopt($rec_id);
@@ -340,5 +340,14 @@ class AskQuestionsService extends BaseService {
             return ajax_arr('采纳失败' , 500);
         }
         return ajax_arr('采纳成功' , 0);
+    }
+
+    public function addPrice($id , $price){
+
+        $flag =  $this->model->where('id' , $id)->setInc('price' ,$price);
+        if( !$flag ){
+            exception('追加悬赏失败' , 500);
+        }
+        return $flag;
     }
 }

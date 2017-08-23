@@ -5,12 +5,15 @@
 	<small>阅读 <?= $data['pv'] ?></small>
 	<small><a href="<?= $param['uri']['this'] ?>#comments">评论 <?= $data['comments'] ?></a></small>
 	<small>喜欢 <?= $data['likes'] ?></small>
+	<small>悬赏 <?= $data['price'] ?><button class="btn btn-link addPriceBtn"  data-toggle="modal" data-target="#addPriceModal" data-id="{$data.id}">追加悬赏</button></small>
+	<button class="btn btn-link editBtn" data-id="{$data.id}">编辑</button></p>
 </div>
 <!-- detail page header end -->
 
 <!-- detail content start -->
 <div class="article-content">
 	<?= $data['content'] ?>
+	<div id="sendAnswer">
 	<textarea name="content" placeholder="内容" class="form-control editor"
 			  style="width: 100%"></textarea>
 
@@ -20,9 +23,13 @@
 			</button>
 
 		</div>
-
+	</div>
 </div>
 <!-- detail content end -->
+<div class="article-content" >
+	<div>最佳答案</div>
+	{$answer.content}
+</div>
 
 <!-- like button start -->
 <hr>
@@ -62,3 +69,23 @@
 	</div>
 </div>-->
 <!-- comments end -->
+
+<div class="modal fade" id="addPriceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">追加悬赏</h4>
+			</div>
+			<div class="modal-body">
+				<div class="alert  alert-info"><i class="fa fa-exclamation-circle"></i>提高悬赏，以提高问题的关注度！</div>
+				<div class="form-group form-inline">
+				<label for="addprice">追加</label><div id="addprice" style="display: inline;"></div>个金币,您目前有({$userData.price})个金币
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" id="sendPriceBtn">提交</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>

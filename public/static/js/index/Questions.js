@@ -20,19 +20,23 @@ var Questions = {
     '<a href="/user/{authorId}">{author}</a> @ <small class="text-muted">{timestamp}</small></div>' +
     '<div class="content">{content}</div>' +
     '<p class="text-right">' +
+    '{adoptBtn}' +
     '{replyBtn}' +
     '{reply}</li>' ,
-    answerReplyBtnTemp :'<button class="btn btn-link adoptBtn" data-id="{articleId}">采纳为最佳答案</button><button class="btn btn-link replyBtn" data-id="{articleId}">回复</button></p>' ,
+    answerAdoptBtnTemp : '<button class="btn btn-link adoptBtn" data-id="{articleId}">采纳为最佳答案</button>',
+    answerReplyBtnTemp :'<button class="btn btn-link replyBtn" data-id="{articleId}">回复</button></p>' ,
     answerItemReplyTemp : '<div class="reply"><blockquote>{replyContent}<footer>{timestamp}</footer></blockquote></div>' ,
   } ,
   init : function () {
+    this.initQuestion();
     this.initImg();
     this.initLikes();
-    this.initAnswers();
+  //  this.initAnswers();
     this.initBtn();
     this.initSendAnswer();
     this.initReplyComment();
     this.initSendCommentReply();
+    this.initPriceModal();
   //  this.initSendComment();
     this.initMenu();
 
@@ -126,7 +130,7 @@ var Questions = {
   } ,
   initAnswers : function(){
     var self = this;
-    var data = {};
+  //  var data = {question_status:self.config.question.status};
 
     $.get( Param.uri.answers ).fail( function(res){
       tips.error( res.msg );
@@ -148,6 +152,13 @@ var Questions = {
               .replace( /\{replyContent}/g , row[ 'reply' ] )
               .replace( /\{timestamp}/g , row[ 'replied_at' ].substr( 2 , 14 ) );
         } else {
+          if(self.config.question.status != 2){
+            adoptBtn = self.config.answerAdoptBtnTemp
+              .replace( /\{articleId}/g , row[ 'id' ] );
+          }else{
+            adoptBtn = '';
+          }
+
           replyBtn = self.config.answerReplyBtnTemp
               .replace( /\{articleId}/g , row[ 'id' ] );
         }
@@ -157,6 +168,7 @@ var Questions = {
             .replace( /\{authorId}/g , row[ 'user_id' ] )
             .replace( /\{timestamp}/g , row[ 'created_at' ].substr( 2 , 14 ) )
             .replace( /\{replyBtn}/g , replyBtn )
+            .replace( /\{adoptBtn}/g , adoptBtn )
             .replace( /\{content}/g , row[ 'content' ] )
             .replace( /\{reply}/g , reply );
       }
@@ -335,6 +347,27 @@ var Questions = {
   initMenu : function(){
     $('.navbar-collapse li:eq(0)').addClass('active');
   },
+
+  initQuestion : function () {
+    var self  = this;
+    var data = {from:'api'};
+    $.get(Param.uri.this , data)
+        .done(function(res){
+          if(res.code == 0 ){
+            self.config.question = res.data;
+            if(self.config.question.status == 2){
+              $('#sendAnswer').hide();
+
+            }
+            self.initAnswers();
+          }else{
+            tips.error(res.msg);
+          }
+        })
+        .fail(function(res){
+          tips.error(res.msg);
+        });
+  },
   initBtn : function(){
     var self = this;
     $('body').on('click' ,'.adoptBtn' , function(e){
@@ -354,6 +387,57 @@ var Questions = {
         }).fail(function(res){
               tips.error(res.msg);
             });
+    });
+
+    $('.editBtn').on('click' , function(e){
+      e.preventDefault();
+      id = $(this).data('id');
+      var url = '/question/create/' + id;
+      window.location.href = url;
+    });
+
+    $('.addPriceBtn').on( 'click' , function(e){
+      e.preventDefault();
+      var id = $(this).data('id');
+
+    });
+
+    $('#sendPriceBtn').on( 'click' , function(e){
+      e.preventDefault();
+      var id = $(this).data('id');
+      var price = $('#addprice').find('option:selected').text();
+
+      data = {price : price , id : id};
+      $.post( Param.uri.addPrice , data).done(function (res) {
+        if( res.code == 0){
+          tips.success(res.msg);
+          $('#addPriceModal').modal('hide')
+        }else{
+          tips.error(res.msg);
+        }
+
+      }).fail(function (res){
+        tips.error(res.msg);
+      });
+    });
+
+
+  },
+
+  initPriceModal : function(){
+    var data = {};
+    $.get(Param.uri.pricearr , data ).done(function(res){
+      var html = '<select>';
+  //    var data = JSON.parse(res.data);
+      for(var i=0;i < res.data.length ; i++){
+        html += '<option>'+res.data[i]+'</option>';
+      }
+      html += '</select>';
+    //  tips.success(res.msg);
+
+      $('#addPriceModal .modal-body #addprice').html(html);
+    }).fail(function(res){
+      tips.error(res.msg);
     });
 
   }

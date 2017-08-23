@@ -34,8 +34,12 @@ Route::rule( 'article/:id' , 'index/articles/detail' );
 
 //问题详情
 Route::rule([ 'question/:id$' => ['index/questions/detail' ,[] , ['id'=> '\d+']]]);
-Route::rule( 'question/create' , 'index/questions/create' );
+Route::rule( 'question/create/[:id]' , 'index/questions/create' );
 Route::rule( 'question/index/[:page]' , 'index/questions/index' );
+
+Route::rule( 'question/addprice/:id' , 'index/questions/addprice' );
+
+Route::rule( 'question/pricearr' , 'index/questions/price' );
 
 //Route::rule( 'question/:catid/[:page]' , 'index/questions/index' );
 //商品详情

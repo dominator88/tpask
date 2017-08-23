@@ -7,9 +7,11 @@ use apps\common\controller\IndexBase;
 use apps\common\service\AskAnswersService;
 use apps\common\service\AskQuestionsService;
 use apps\common\service\AskUserCommentsService;
+use apps\common\service\AskUserService;
 use apps\common\service\MerUserFavoritesService;
 use apps\common\service\AskUserLikesService;
 use cebe\markdown\Markdown;
+use think\Db;
 
 
 
@@ -60,12 +62,21 @@ class Questions extends IndexBase {
    // return json( ajax_arr( '查询成功' , 0 , $response ) );
   }
 
-  public function create(){
+  public function create($id = 0){
+      if(!$this->userId){
+        return  redirect('/auth/signin');
+      }
+
       $method = strtolower(request()->method());
       switch($method){
           case 'get' :
               $this->_init('创建问题');
-              $this->_addParam('uri' , [ 'questioncreate' => full_uri( 'index/questions/create') ,'questioncategory' => full_uri( 'index/category/index')]);
+              $this->_addParam('uri' , [ 'questioncreate' => full_uri( "index/question/create/{$id}") ,'questioncategory' => full_uri( 'index/category/index')]);
+              if($id){
+                  $AskQuestions = AskQuestionsService::instance();
+                  $data = $AskQuestions->getById($id);
+                  $this->_addData('data',$data);
+              }
               $this->data['initPageJs'] = false;
               $this->data['jsLib'][]  = 'static/js/index/QuestionsCreate.js';
               $this->data['jsCode']  = [
@@ -84,6 +95,8 @@ class Questions extends IndexBase {
               $catalog_id = input('post.category' ,'' , 'trim');
                 $price = input('post.price' ,0 , 'intval');
               $hide = input('post.hide' ,0);
+              $id = input('param.id' , 0 ,'intval');
+
               $data = [
                   'title' => $title,
                   'content' => $content ,
@@ -97,7 +110,12 @@ class Questions extends IndexBase {
 
               ];
               $AskQuestions = AskQuestionsService::instance();
-              $result = $AskQuestions->insert($data);
+              if($id){
+
+                  $result = $AskQuestions->update($id , $data);
+              }else{
+                  $result = $AskQuestions->insert($data);
+              }
               break;
 
 
@@ -116,9 +134,12 @@ class Questions extends IndexBase {
   public function detail( $id ) {
 
       $AskQuestions = AskQuestionsService::instance();
-    
+        $AskAnswers = AskAnswersService::instance();
     //取文章详情
     $data = $AskQuestions->getDetailById( $id );
+      //取最佳答案
+      $answer = $AskAnswers->getById($data['adopt']);
+
 //echo $id;
     if ( empty( $data ) ) {
       game_over( '文章未知道' );
@@ -133,18 +154,20 @@ class Questions extends IndexBase {
       'this'      => "/question/$id" ,
         'answers'   => "/question/answers/$id",
         'answercomments'   => "question/comments/answers/$id",
+        'pricearr' => "question/pricearr",
         'adopt'     => "question/adopt/$id",
       'comments'  => "/question/comments/$id" ,
-
+        'addPrice' => "/question/addPrice/$id",
       'likes'     => "/question/likes/$id" ,
       'favorites' => "/question/favorites/$id"
     ] );
     $data['from']    = input( 'get.from' , 'web' );
     $data['content'] = $this->_parseMarkdown( $data['content'] );
     $this->_addData( 'data' , $data );
-
+    $this->_addData('answer' , $answer);
+      $this->_addData('userData' , $this->userData);
     if ( $data['from'] == 'api' ) {
-      return view( 'api' , $this->data );
+      return ajax_arr( '查询成功' , 0 ,   $data  );
     }
     
     //print_arr( $this->data );
@@ -178,7 +201,8 @@ class Questions extends IndexBase {
                 'qid'   => $id,
                 'page'     => input( 'get.page' , 1 ) ,
                 'pageSize' => input( 'get.pageSize' , 6 ) ,
-                'statusGT' => - 1 ,
+                'status' => 1 ,
+                'adopt' => 0,
                 'sort'     => 'id' ,
                 'order'    => 'desc'
             ]);
@@ -361,6 +385,58 @@ class Questions extends IndexBase {
               return ajax_arr( '未知请求' , 500 );
       }
   }
+
+    /**
+     * 追加悬赏
+     * @param $id
+     * @return array
+     */
+  public function addPrice($id){
+      $method = strtolower( request()->method() );
+      $AskQuestions = AskQuestionsService::instance();
+      if($method == 'post'){
+          $price = input('param.price');
+          $AskUser = AskUserService::instance();
+          Db::startTrans();
+          try{
+               $AskUser->decPrice($this->userId ,  $price);
+              $AskQuestions->addPrice($id , $price);
+              Db::commit();
+          }catch (\Exception $e){
+              Db::rollback();
+              return ajax_arr( $e->getMessage() , $e->getCode());
+          }
+          return ajax_arr('追加悬赏成功' , 0);
+
+      }
+      return ajax_arr( '未知请求' , 500 );
+
+  }
+
+    /**
+     * 悬赏金币列表
+     * @return array
+     */
+  public function price()
+  {
+
+      $method = strtolower(request()->method());
+
+      $AskUser = AskUserService::instance();
+      $user = $AskUser->getById($this->userId);
+      if(empty($user)){
+          return ajax_arr('用户未登陆!', 500);
+      }
+
+      switch ($method) {
+          case 'get' :
+              $price_arr = [3, 5, 8, 10, 20, 30, 50];
+              return ajax_arr('查询成功', 0, $price_arr);
+          default :
+              return ajax_arr('未知请求', 500);
+      }
+  }
+
 
 
 }

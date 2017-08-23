@@ -771,4 +771,53 @@ class AskUserService extends BaseService {
         }
     }
 
+    /**
+     * 用户悬赏金币验证
+     * @param $userId
+     * @param $price
+     * @return bool
+     */
+    public function checkPrice($userId , $price){
+        $userData = $this->getById($userId);
+        return $userData['price'] >= $price;
+    }
+
+    /**
+     * 减少用户金币
+     * @param $userId
+     * @param $price
+     * @return bool
+     */
+    public function decPrice($userId , $price){
+        $flag = $this->checkPrice($userId , $price);
+
+        if( $flag ){
+            $flag_price = $this->model->where('id'  , $userId)->setDec('price' , $price);
+            if(!$flag_price){
+                exception('操作金币失败' , 500);
+            }
+          return true;
+        }else{
+            exception('余额不足' ,500);
+        }
+
+    }
+
+
+    /**
+     * 增加用户金币
+     * @param $userId
+     * @param $price
+     * @return bool
+     */
+    public function incPrice($userId , $price){
+        $flag_price = $this->model->where('id'  , $userId)->setDec('price' , $price);
+        if(!$flag_price){
+           exception( '操作金币失败' , 500);
+        }
+        return true;
+    }
+
+
+
 }
